@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matrum.fullname" . }}
+  labels:
+    {{- include "matrum.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "matrum.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "matrum.selectorLabels" . | nindent 8 }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum | trunc 10}}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "matrum.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SYNAPSE_SERVER_NAME
+              value: nordisch.chat
+            - name: SYNAPSE_REPORT_STATS
+              value: {{ .Values.synapse.reportStats | quote }}
+            - name: SYNAPSE_DATA_DIR
+              value: /data
+            - name: SYNAPSE_CONFIG_DIR
+              value: /config
+          ports:
+            - name: synapse
+              containerPort: 8008
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: {{ include "matrum.dataVolumeName" . }}
+            - mountPath: /config
+              name: {{ include "matrum.secretName" . }}
+          livenessProbe:
+            httpGet:
+              port: synapse
+              path: "/health"
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          readinessProbe:
+            httpGet:
+              port: synapse
+              path: "/health"
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ include "matrum.dataVolumeName" . }}
+          persistentVolumeClaim:
+            claimName: {{ include "matrum.dataVolumeName" . }}
+        - name: {{ include "matrum.secretName" . }}
+          secret:
+            secretName: {{ include "matrum.secretName" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
