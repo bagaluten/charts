@@ -28,6 +28,28 @@ spec:
       serviceAccountName: {{ include "matrum.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: matrum-init
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          volumeMounts:
+            - mountPath: /data
+              name: {{ include "matrum.dataVolumeName" . }}
+          command: [bash, -c]
+          args:
+            - >
+              [ ! -f /data/homeserver.yml ] &&
+              python -m synapse.app.homeserver
+              --server-name {{ .Values.synapse.domain }}
+              --data-directory /data
+              --config-directory /data
+              --config-path /data/homeserver.yaml
+              --generate-config
+              --report-stats={{ .Values.synapse.reportStats }} &&
+              sed -i s/#suppress_key_server_warning:/suppress_key_server_warning:/ /data/homeserver.yaml &&
+              sed -i "/bind_addresses:\s\['::1',\s'127.0.0.1'\]/d" /data/homeserver.yaml
+          workingDir: /data
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -36,13 +58,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: SYNAPSE_SERVER_NAME
-              value: nordisch.chat
+              value: {{ .Values.synapse.domain }}
             - name: SYNAPSE_REPORT_STATS
               value: {{ .Values.synapse.reportStats | quote }}
-            - name: SYNAPSE_DATA_DIR
-              value: /data
-            - name: SYNAPSE_CONFIG_DIR
-              value: /config
           ports:
             - name: synapse
               containerPort: 8008
