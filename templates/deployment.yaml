@@ -63,7 +63,7 @@ spec:
               value: {{ .Values.synapse.reportStats | quote }}
           ports:
             - name: synapse
-              containerPort: 8008
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           volumeMounts:
             - mountPath: /data
