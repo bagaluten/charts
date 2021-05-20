@@ -12,21 +12,22 @@ image:
 
 synapse:
   reportStats: "yes"
-  # domain: example.com
+  domain: nordisch.chat
 
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
   hosts:
-  #    - host: example.com
-  #      paths:
-  #        - path: /
+    - host: nordisch.chat
+      paths:
+        - path: /
   tls:
     - secretName: matrum-certificate
       hosts:
-      # - example.com
+        - nordisch.chat
 
 storage:
   storageClass: "hcloud-volumes"
