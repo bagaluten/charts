@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  matrum:
+  - apiVersion: v2
+    appVersion: v1.68.0
+    created: "2022-10-10T19:02:59.471000087Z"
+    description: A Helm chart for a Synapse Matrix server
+    digest: 019544b3716e3a6f57a93a774a75b502421cea70097b44e20ef43bab8ad00414
+    name: matrum
+    type: application
+    urls:
+    - https://github.com/bagaluten/charts/releases/download/matrum-0.2.0/matrum-0.2.0.tgz
+    version: 0.2.0
+generated: "2022-10-10T19:02:59.471007287Z"
