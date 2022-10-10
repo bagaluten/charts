@@ -1,6 +1,6 @@
 apiVersion: v2
 name: matrum
-description: A Helm chart for a Synapse Matrix server.
+description: A Helm chart for a Synapse Matrix server
 
 # A chart can be either an 'application' or a 'library' chart.
 #
