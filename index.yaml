@@ -13,6 +13,16 @@ entries:
     version: 0.2.0
   tainter:
   - apiVersion: v2
+    appVersion: 0.1.2
+    created: "2024-03-08T23:23:41.052555717Z"
+    description: A Helm chart for the Kubernetes Node Tainter
+    digest: ea51d9ee23f3f881da34ee648f3c1804be48945a0a738dabcd71b15d3c46fce4
+    name: tainter
+    type: application
+    urls:
+    - https://github.com/bagaluten/charts/releases/download/tainter-0.1.2/tainter-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 0.1.0
     created: "2024-03-08T00:42:49.747622028Z"
     description: A Helm chart for the Kubernetes Node Tainter
@@ -22,4 +32,4 @@ entries:
     urls:
     - https://github.com/bagaluten/charts/releases/download/tainter-0.1.0/tainter-0.1.0.tgz
     version: 0.1.0
-generated: "2024-03-08T00:42:49.747631946Z"
+generated: "2024-03-08T23:23:41.052564874Z"
