@@ -1,0 +1,11 @@
+{{- if not .Values.config.existingConfigMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tainter-config-{{ include "tainter.fullname" . }}
+  labels:
+    {{- include "tainter.labels" . | nindent 4 }}
+data:
+  taint-controller.yaml:
+  {{- toYaml .Values.config.data | nindent 4 }}
+{{- end }}
