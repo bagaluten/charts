@@ -11,6 +11,17 @@ entries:
     urls:
     - https://github.com/bagaluten/charts/releases/download/matrum-0.2.0/matrum-0.2.0.tgz
     version: 0.2.0
+  metio-web:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-03-11T20:50:23.768858659Z"
+    description: The frontend web application for the metio project.
+    digest: 90a8ed12a894d1eb7318c91e4a8a3bc59409161c7722696571a8fee5190796f9
+    name: metio-web
+    type: application
+    urls:
+    - https://github.com/bagaluten/charts/releases/download/metio-web-0.0.1/metio-web-0.0.1.tgz
+    version: 0.0.1
   tainter:
   - apiVersion: v2
     appVersion: 0.1.3
@@ -42,4 +53,4 @@ entries:
     urls:
     - https://github.com/bagaluten/charts/releases/download/tainter-0.1.0/tainter-0.1.0.tgz
     version: 0.1.0
-generated: "2024-03-08T23:31:26.553347866Z"
+generated: "2024-03-11T20:50:23.768873637Z"
